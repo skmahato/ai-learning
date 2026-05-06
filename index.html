@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineer Roadmap</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface-hover: #222632;
+    --border: #2a2e3b;
+    --text: #e4e4e7;
+    --text-muted: #8b8fa3;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.15);
+    --green: #22c55e;
+    --green-glow: rgba(34, 197, 94, 0.15);
+    --yellow: #eab308;
+    --orange: #f97316;
+    --red: #ef4444;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: var(--accent-glow);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: var(--accent-light);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #e4e4e7 0%, #818cf8 50%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header p {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .overall-progress {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 36px;
+  }
+
+  .overall-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .overall-progress-header span:first-child { font-weight: 600; font-size: 15px; }
+  .overall-progress-header span:last-child { color: var(--accent-light); font-weight: 700; font-size: 15px; }
+
+  .progress-bar-bg {
+    height: 10px;
+    background: var(--bg);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+
+  .stats-row { display: flex; gap: 24px; margin-top: 16px; }
+  .stat { font-size: 13px; color: var(--text-muted); }
+  .stat strong { color: var(--text); font-weight: 600; }
+
+  .phase {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .phase:hover { border-color: rgba(99, 102, 241, 0.3); }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+    gap: 16px;
+  }
+
+  .phase-header:hover { background: var(--surface-hover); }
+
+  .phase-number {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px; flex-shrink: 0; color: #fff;
+  }
+
+  .phase-info { flex: 1; min-width: 0; }
+  .phase-title { font-weight: 700; font-size: 16px; margin-bottom: 2px; }
+  .phase-meta { font-size: 13px; color: var(--text-muted); }
+
+  .phase-progress-mini { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .phase-progress-mini .mini-bar { width: 80px; height: 6px; background: var(--bg); border-radius: 100px; overflow: hidden; }
+  .phase-progress-mini .mini-fill { height: 100%; border-radius: 100px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 0%; }
+  .phase-progress-mini .mini-text { font-size: 13px; font-weight: 600; color: var(--text-muted); min-width: 36px; text-align: right; }
+
+  .phase-chevron { color: var(--text-muted); transition: transform 0.3s ease; flex-shrink: 0; }
+  .phase.open .phase-chevron { transform: rotate(180deg); }
+
+  .phase-body { display: none; padding: 0 24px 20px; }
+  .phase.open .phase-body { display: block; }
+
+  .phase-description {
+    font-size: 14px; color: var(--text-muted); font-style: italic;
+    margin-bottom: 16px; padding-left: 4px;
+  }
+
+  .section-title {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--text-muted);
+    margin: 20px 0 10px; padding-left: 4px;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  .topic {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 12px; border-radius: var(--radius-sm); transition: background 0.15s;
+  }
+  .topic:hover { background: var(--surface-hover); }
+
+  .topic-checkbox {
+    appearance: none; -webkit-appearance: none;
+    width: 20px; height: 20px; border: 2px solid var(--border);
+    border-radius: 6px; cursor: pointer; flex-shrink: 0;
+    margin-top: 1px; transition: all 0.2s; position: relative;
+  }
+  .topic-checkbox:hover { border-color: var(--accent); }
+  .topic-checkbox:checked { background: var(--accent); border-color: var(--accent); }
+  .topic-checkbox:checked::after {
+    content: ''; position: absolute; left: 5px; top: 2px;
+    width: 6px; height: 10px; border: solid #fff;
+    border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+
+  .topic.completed .topic-text {
+    color: var(--text-muted); text-decoration: line-through;
+    text-decoration-color: rgba(139, 143, 163, 0.4);
+  }
+
+  .topic-content { flex: 1; min-width: 0; }
+  .topic-text { font-size: 14px; line-height: 1.5; transition: color 0.2s; }
+  .topic-text strong { color: var(--accent-light); font-weight: 600; }
+
+  .topic-actions { display: flex; gap: 4px; flex-shrink: 0; opacity: 0; transition: opacity 0.15s; }
+  .topic:hover .topic-actions { opacity: 1; }
+
+  .btn-comment {
+    background: none; border: 1px solid var(--border); color: var(--text-muted);
+    padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 12px;
+    transition: all 0.15s; display: flex; align-items: center; gap: 4px;
+  }
+  .btn-comment:hover { border-color: var(--accent); color: var(--accent-light); }
+  .btn-comment.has-comment { border-color: rgba(99, 102, 241, 0.4); color: var(--accent-light); opacity: 1; }
+  .topic:hover .btn-comment.has-comment, .btn-comment.has-comment { opacity: 1; }
+
+  .topic-comment { display: none; margin-top: 8px; }
+  .topic-comment.visible { display: block; }
+
+  .topic-comment textarea {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text);
+    padding: 10px 12px; font-family: inherit; font-size: 13px;
+    line-height: 1.5; resize: vertical; min-height: 60px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .topic-comment textarea:focus { border-color: var(--accent); }
+  .topic-comment textarea::placeholder { color: rgba(139, 143, 163, 0.5); }
+  .comment-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; opacity: 0.6; }
+
+  /* Resources */
+  .topic-resources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .resource-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+
+  .resource-link:hover {
+    transform: translateY(-1px);
+  }
+
+  .resource-link .r-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  .resource-link.yt {
+    background: rgba(255, 0, 0, 0.08);
+    color: #f87171;
+    border-color: rgba(255, 0, 0, 0.15);
+  }
+  .resource-link.yt:hover {
+    background: rgba(255, 0, 0, 0.15);
+    border-color: rgba(255, 0, 0, 0.3);
+  }
+
+  .resource-link.doc {
+    background: rgba(59, 130, 246, 0.08);
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, 0.15);
+  }
+  .resource-link.doc:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+
+  .resource-link.channel {
+    background: rgba(236, 72, 153, 0.08);
+    color: #f472b6;
+    border-color: rgba(236, 72, 153, 0.15);
+  }
+  .resource-link.channel:hover {
+    background: rgba(236, 72, 153, 0.15);
+    border-color: rgba(236, 72, 153, 0.3);
+  }
+
+  .resource-link.github {
+    background: rgba(163, 163, 163, 0.08);
+    color: #a3a3a3;
+    border-color: rgba(163, 163, 163, 0.15);
+  }
+  .resource-link.github:hover {
+    background: rgba(163, 163, 163, 0.15);
+    border-color: rgba(163, 163, 163, 0.3);
+  }
+
+  .resource-link.course {
+    background: rgba(34, 197, 94, 0.08);
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.15);
+  }
+  .resource-link.course:hover {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+
+  /* Phase resources box */
+  .phase-resources-box {
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-top: 16px;
+  }
+
+  .phase-resources-box .pr-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--accent-light); margin-bottom: 10px;
+  }
+
+  .phase-resources-box .pr-list {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+
+  .phase-resources-box .pr-item {
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .phase-resources-box .pr-item a {
+    color: var(--text); text-decoration: none; font-size: 13px;
+    transition: color 0.15s;
+  }
+  .phase-resources-box .pr-item a:hover { color: var(--accent-light); }
+
+  .phase-resources-box .pr-item .pr-badge {
+    font-size: 10px; font-weight: 600; padding: 2px 6px;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  .pr-badge.yt { background: rgba(255,0,0,0.12); color: #f87171; }
+  .pr-badge.doc { background: rgba(59,130,246,0.12); color: #60a5fa; }
+  .pr-badge.channel { background: rgba(236,72,153,0.12); color: #f472b6; }
+  .pr-badge.course { background: rgba(34,197,94,0.12); color: #4ade80; }
+
+  .project-card {
+    background: var(--accent-glow);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px; margin-top: 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .project-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .project-card .project-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-light); margin-bottom: 4px; }
+  .project-card .project-text { font-size: 14px; line-height: 1.5; }
+
+  .timeline-section { margin-top: 48px; }
+  .timeline-section h2 { font-size: 22px; font-weight: 700; margin-bottom: 20px; }
+
+  .timeline-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--surface); border-radius: var(--radius);
+    overflow: hidden; border: 1px solid var(--border);
+  }
+  .timeline-table th {
+    text-align: left; font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-muted); padding: 14px 20px;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+  }
+  .timeline-table td { padding: 12px 20px; font-size: 14px; border-bottom: 1px solid var(--border); }
+  .timeline-table tr:last-child td { border-bottom: none; font-weight: 700; background: var(--accent-glow); }
+  .timeline-duration { color: var(--accent-light); font-weight: 600; }
+
+  .footer-actions { display: flex; justify-content: center; gap: 12px; margin-top: 40px; }
+
+  .btn-reset, .btn-export {
+    background: none; border: 1px solid var(--border); color: var(--text-muted);
+    padding: 10px 20px; border-radius: var(--radius-sm); cursor: pointer;
+    font-size: 13px; font-weight: 500; transition: all 0.2s;
+  }
+  .btn-reset:hover { border-color: var(--red); color: var(--red); }
+  .btn-export:hover { border-color: var(--green); color: var(--green); }
+
+  .confirm-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
+    z-index: 1000; align-items: center; justify-content: center;
+  }
+  .confirm-overlay.visible { display: flex; }
+
+  .confirm-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px;
+    max-width: 380px; width: 90%; text-align: center;
+  }
+  .confirm-box h3 { font-size: 17px; margin-bottom: 8px; }
+  .confirm-box p { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+  .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+  .confirm-actions button {
+    padding: 10px 24px; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    border: none; transition: all 0.15s;
+  }
+  .btn-cancel { background: var(--bg); color: var(--text); border: 1px solid var(--border) !important; }
+  .btn-cancel:hover { background: var(--surface-hover); }
+  .btn-danger { background: var(--red); color: #fff; }
+  .btn-danger:hover { opacity: 0.9; }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 14px 60px; }
+    .header h1 { font-size: 28px; }
+    .stats-row { flex-wrap: wrap; gap: 12px; }
+    .phase-header { padding: 16px; gap: 12px; }
+    .phase-body { padding: 0 16px 16px; }
+    .phase-progress-mini .mini-bar { width: 50px; }
+    .topic-actions { opacity: 1; }
+    .timeline-table th, .timeline-table td { padding: 10px 14px; font-size: 13px; }
+    .topic-resources { gap: 4px; }
+    .resource-link { font-size: 10px; padding: 2px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-badge">Self-Paced Syllabus</div>
+    <h1>AI Engineer Roadmap</h1>
+    <p>A structured path from senior frontend developer to AI Engineer. ~5-6 months of focused learning.</p>
+  </div>
+
+  <div class="overall-progress">
+    <div class="overall-progress-header">
+      <span>Overall Progress</span>
+      <span id="overall-pct">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="overall-bar"></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><strong id="stat-done">0</strong> of <strong id="stat-total">0</strong> topics completed</div>
+      <div class="stat"><strong id="stat-comments">0</strong> notes saved</div>
+    </div>
+  </div>
+
+  <div id="phases-container"></div>
+
+  <div class="timeline-section">
+    <h2>Timeline Summary</h2>
+    <table class="timeline-table">
+      <thead><tr><th>Phase</th><th>Duration</th><th>Key Deliverable</th></tr></thead>
+      <tbody>
+        <tr><td>0. Foundations</td><td class="timeline-duration">1-2 weeks</td><td>Python basics, stats refresher</td></tr>
+        <tr><td>1. LLM Fundamentals</td><td class="timeline-duration">2-3 weeks</td><td>CLI chatbot</td></tr>
+        <tr><td>2. Prompt Engineering</td><td class="timeline-duration">2-3 weeks</td><td>Structured data extractor</td></tr>
+        <tr><td>3. AI Applications</td><td class="timeline-duration">3-4 weeks</td><td>Full-stack chat app</td></tr>
+        <tr><td>4. RAG</td><td class="timeline-duration">3-4 weeks</td><td>Chat-with-docs app</td></tr>
+        <tr><td>5. Tool Use</td><td class="timeline-duration">2-3 weeks</td><td>AI assistant with tools</td></tr>
+        <tr><td>6. AI Agents</td><td class="timeline-duration">3-4 weeks</td><td>Coding assistant agent</td></tr>
+        <tr><td>7. Production</td><td class="timeline-duration">2-3 weeks</td><td>Production-grade AI app</td></tr>
+        <tr><td>8. Specialization</td><td class="timeline-duration">Ongoing</td><td>Deep domain expertise</td></tr>
+        <tr><td>Total</td><td class="timeline-duration">~5-6 months</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-actions">
+    <button class="btn-export" onclick="exportProgress()">Export Progress</button>
+    <button class="btn-reset" onclick="showResetConfirm()">Reset All Progress</button>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3>Reset all progress?</h3>
+    <p>This will clear all checkboxes and notes. This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="hideResetConfirm()">Cancel</button>
+      <button class="btn-danger" onclick="resetAll()">Reset Everything</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'ai-engineer-roadmap';
+
+// Helper to create YouTube search URL
+function yt(query) {
+  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(query);
+}
+
+const DATA = [
+  {
+    id: 'phase-0',
+    number: 0,
+    title: 'Foundations',
+    duration: '1-2 weeks',
+    color: '#94a3b8',
+    description: 'Fill any gaps before diving into AI-specific work',
+    sections: [
+      {
+        title: 'Core Skills',
+        topics: [
+          {
+            id: 'p0-1',
+            text: '<strong>Python basics</strong> — syntax, data structures, virtual environments, pip',
+            resources: [
+              { type: 'yt', label: 'Python for JavaScript Devs', url: yt('python tutorial for javascript developers') },
+              { type: 'yt', label: 'Fireship: Python in 100 Seconds', url: yt('fireship python 100 seconds') },
+              { type: 'doc', label: 'Python Official Tutorial', url: 'https://docs.python.org/3/tutorial/' },
+            ]
+          },
+          {
+            id: 'p0-2',
+            text: 'Python crash course for JS devs — focus on differences, not fundamentals',
+            resources: [
+              { type: 'yt', label: 'Python vs JavaScript Comparison', url: yt('python vs javascript syntax comparison for developers') },
+              { type: 'doc', label: 'Learn X in Y: Python', url: 'https://learnxinyminutes.com/python/' },
+            ]
+          },
+          {
+            id: 'p0-3',
+            text: '<strong>HTTP streaming & Server-Sent Events (SSE)</strong> — this is how most LLM APIs deliver responses',
+            resources: [
+              { type: 'yt', label: 'SSE Explained', url: yt('server sent events tutorial javascript') },
+              { type: 'yt', label: 'Fireship: Realtime with SSE', url: yt('fireship server sent events') },
+              { type: 'doc', label: 'MDN: Server-Sent Events', url: 'https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events' },
+            ]
+          },
+          {
+            id: 'p0-4',
+            text: '<strong>Basic statistics & probability</strong> — mean, median, distributions, cosine similarity',
+            resources: [
+              { type: 'yt', label: 'StatQuest: Statistics Fundamentals', url: yt('statquest statistics fundamentals playlist') },
+              { type: 'yt', label: 'Cosine Similarity Explained', url: yt('cosine similarity explained simply') },
+              { type: 'channel', label: 'StatQuest (Josh Starmer)', url: 'https://www.youtube.com/@statquest' },
+            ]
+          },
+          {
+            id: 'p0-5',
+            text: 'Understand embeddings at a conceptual level (you do NOT need linear algebra or calculus)',
+            resources: [
+              { type: 'yt', label: 'Word Embeddings Explained Visually', url: yt('word embeddings explained visually for beginners') },
+              { type: 'yt', label: '3Blue1Brown: Neural Networks', url: yt('3blue1brown neural networks chapter 1') },
+              { type: 'channel', label: '3Blue1Brown', url: 'https://www.youtube.com/@3blue1brown' },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'channel', label: 'Fireship — Fast-paced tech explainers', url: 'https://www.youtube.com/@Fireship' },
+      { type: 'channel', label: '3Blue1Brown — Visual math & ML explanations', url: 'https://www.youtube.com/@3blue1brown' },
+      { type: 'channel', label: 'StatQuest — Statistics made simple', url: 'https://www.youtube.com/@statquest' },
+    ],
+    project: 'Set up a Python dev environment alongside your Node.js setup. Write a small script that calls an API with streaming.'
+  },
+  {
+    id: 'phase-1',
+    number: 1,
+    title: 'LLM Fundamentals',
+    duration: '2-3 weeks',
+    color: '#60a5fa',
+    description: 'Understand what LLMs are and how they work at a practical level',
+    sections: [
+      {
+        title: 'How LLMs Work',
+        topics: [
+          {
+            id: 'p1-1',
+            text: 'How <strong>transformers</strong> work (conceptual, not math-heavy)',
+            resources: [
+              { type: 'yt', label: '3Blue1Brown: Transformers Explained', url: yt('3blue1brown attention in transformers visualized') },
+              { type: 'yt', label: 'Andrej Karpathy: Let\'s Build GPT', url: yt('andrej karpathy let\'s build GPT from scratch') },
+              { type: 'channel', label: 'Andrej Karpathy', url: 'https://www.youtube.com/@AndrejKarpathy' },
+            ]
+          },
+          {
+            id: 'p1-2',
+            text: 'Tokens, context windows, and attention mechanisms (high-level)',
+            resources: [
+              { type: 'yt', label: 'Tokenization Explained', url: yt('LLM tokenization explained visually') },
+              { type: 'yt', label: 'Andrej Karpathy: Tokenizers', url: yt('andrej karpathy tokenizer') },
+              { type: 'doc', label: 'OpenAI Tokenizer Tool', url: 'https://platform.openai.com/tokenizer' },
+            ]
+          },
+          {
+            id: 'p1-3',
+            text: '<strong>Temperature, top-p, top-k</strong> sampling parameters',
+            resources: [
+              { type: 'yt', label: 'LLM Sampling Explained', url: yt('LLM temperature top-p top-k sampling explained') },
+              { type: 'doc', label: 'Anthropic API Docs: Messages', url: 'https://docs.anthropic.com/en/api/messages' },
+            ]
+          },
+          {
+            id: 'p1-4',
+            text: 'Token limits and pricing models across providers',
+            resources: [
+              { type: 'doc', label: 'Anthropic Pricing', url: 'https://www.anthropic.com/pricing' },
+              { type: 'doc', label: 'OpenAI Pricing', url: 'https://openai.com/api/pricing/' },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Prompt Structure',
+        topics: [
+          {
+            id: 'p1-5',
+            text: 'System prompts vs user prompts vs assistant messages',
+            resources: [
+              { type: 'doc', label: 'Anthropic: System Prompts', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/system-prompts' },
+              { type: 'yt', label: 'System Prompts Deep Dive', url: yt('system prompt vs user prompt LLM explained') },
+            ]
+          },
+          {
+            id: 'p1-6',
+            text: 'Chat completions vs text completions',
+            resources: [
+              { type: 'doc', label: 'Anthropic: Messages API', url: 'https://docs.anthropic.com/en/api/messages' },
+              { type: 'doc', label: 'OpenAI: Chat Completions', url: 'https://platform.openai.com/docs/guides/text-generation' },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Model Landscape',
+        topics: [
+          {
+            id: 'p1-7',
+            text: '<strong>OpenAI</strong> — GPT-4o, o3 series',
+            resources: [
+              { type: 'doc', label: 'OpenAI Models Overview', url: 'https://platform.openai.com/docs/models' },
+              { type: 'yt', label: 'GPT-4o Overview & Demos', url: yt('GPT-4o overview capabilities demo') },
+            ]
+          },
+          {
+            id: 'p1-8',
+            text: '<strong>Anthropic</strong> — Claude Opus, Sonnet, Haiku',
+            resources: [
+              { type: 'doc', label: 'Claude Models Overview', url: 'https://docs.anthropic.com/en/docs/about-claude/models' },
+              { type: 'yt', label: 'Claude Overview & Comparison', url: yt('anthropic claude opus sonnet haiku comparison') },
+            ]
+          },
+          {
+            id: 'p1-9',
+            text: '<strong>Google</strong> — Gemini family',
+            resources: [
+              { type: 'doc', label: 'Google AI Studio', url: 'https://aistudio.google.com/' },
+              { type: 'yt', label: 'Gemini Models Explained', url: yt('google gemini models explained comparison') },
+            ]
+          },
+          {
+            id: 'p1-10',
+            text: '<strong>Open-source</strong> — Llama, Mistral, and when to use them',
+            resources: [
+              { type: 'yt', label: 'Open Source LLMs Explained', url: yt('best open source LLMs llama mistral comparison 2025') },
+              { type: 'doc', label: 'Hugging Face Open LLM Leaderboard', url: 'https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard' },
+            ]
+          },
+          {
+            id: 'p1-11',
+            text: 'Cost vs speed vs quality tradeoffs — when to use which model',
+            resources: [
+              { type: 'yt', label: 'Choosing the Right LLM', url: yt('how to choose the right LLM for your project cost speed quality') },
+              { type: 'doc', label: 'Artificial Analysis Benchmarks', url: 'https://artificialanalysis.ai/' },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'channel', label: 'Andrej Karpathy — Best deep-dives on LLM internals', url: 'https://www.youtube.com/@AndrejKarpathy' },
+      { type: 'course', label: 'freeCodeCamp: LLM Course for Beginners', url: yt('freeCodeCamp large language models course beginners') },
+      { type: 'channel', label: 'Matt Williams — Practical LLM tutorials', url: yt('matt williams LLM tutorial') },
+    ],
+    project: 'Build a simple chatbot CLI in Node.js using the Anthropic SDK'
+  },
+  {
+    id: 'phase-2',
+    number: 2,
+    title: 'Prompt Engineering',
+    duration: '2-3 weeks',
+    color: '#a78bfa',
+    description: 'The single most important skill for an AI Engineer',
+    sections: [
+      {
+        title: 'Prompt Design Patterns',
+        topics: [
+          {
+            id: 'p2-1',
+            text: '<strong>Zero-shot</strong> prompting — no examples needed',
+            resources: [
+              { type: 'doc', label: 'Anthropic: Prompt Engineering Guide', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview' },
+              { type: 'yt', label: 'Zero-Shot vs Few-Shot Explained', url: yt('zero shot few shot prompting explained examples') },
+            ]
+          },
+          {
+            id: 'p2-2',
+            text: '<strong>Few-shot</strong> prompting — learning from examples',
+            resources: [
+              { type: 'yt', label: 'Few-Shot Prompting Tutorial', url: yt('few shot prompting tutorial LLM examples') },
+              { type: 'doc', label: 'Anthropic: Prompt Examples', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/use-examples' },
+            ]
+          },
+          {
+            id: 'p2-3',
+            text: '<strong>Chain-of-thought</strong> — step-by-step reasoning',
+            resources: [
+              { type: 'yt', label: 'Chain-of-Thought Prompting', url: yt('chain of thought prompting explained tutorial') },
+              { type: 'doc', label: 'Anthropic: Chain of Thought', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/chain-of-thought' },
+            ]
+          },
+          {
+            id: 'p2-4',
+            text: 'Role prompting and system prompt design',
+            resources: [
+              { type: 'yt', label: 'System Prompt Design Patterns', url: yt('system prompt design best practices LLM') },
+              { type: 'doc', label: 'Anthropic: System Prompts Guide', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/system-prompts' },
+            ]
+          },
+          {
+            id: 'p2-5',
+            text: 'Output formatting — JSON mode, structured outputs',
+            resources: [
+              { type: 'yt', label: 'Structured Outputs from LLMs', url: yt('LLM structured output JSON mode tutorial') },
+              { type: 'doc', label: 'OpenAI: Structured Outputs', url: 'https://platform.openai.com/docs/guides/structured-outputs' },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Reliability & Safety',
+        topics: [
+          {
+            id: 'p2-6',
+            text: 'Handling and reducing <strong>hallucinations</strong>',
+            resources: [
+              { type: 'yt', label: 'Reducing LLM Hallucinations', url: yt('how to reduce LLM hallucinations techniques') },
+              { type: 'doc', label: 'Anthropic: Reduce Hallucinations', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/reduce-hallucinations' },
+            ]
+          },
+          {
+            id: 'p2-7',
+            text: 'Guardrails and output validation',
+            resources: [
+              { type: 'yt', label: 'LLM Guardrails Tutorial', url: yt('LLM guardrails output validation tutorial') },
+              { type: 'github', label: 'Guardrails AI', url: 'https://github.com/guardrails-ai/guardrails' },
+            ]
+          },
+          {
+            id: 'p2-8',
+            text: '<strong>Prompt injection</strong> attacks and defenses',
+            resources: [
+              { type: 'yt', label: 'Prompt Injection Explained', url: yt('prompt injection attacks explained defense LLM security') },
+              { type: 'doc', label: 'OWASP: LLM Top 10', url: 'https://owasp.org/www-project-top-10-for-large-language-model-applications/' },
+              { type: 'doc', label: 'Simon Willison: Prompt Injection', url: 'https://simonwillison.net/series/prompt-injection/' },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Advanced Techniques',
+        topics: [
+          {
+            id: 'p2-9',
+            text: '<strong>Prompt chaining</strong> — breaking complex tasks into steps',
+            resources: [
+              { type: 'yt', label: 'Prompt Chaining Tutorial', url: yt('prompt chaining LLM complex tasks tutorial') },
+              { type: 'doc', label: 'Anthropic: Prompt Chaining', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/chain-prompts' },
+            ]
+          },
+          {
+            id: 'p2-10',
+            text: 'Self-reflection and self-correction patterns',
+            resources: [
+              { type: 'yt', label: 'LLM Self-Correction Patterns', url: yt('LLM self reflection self correction prompting pattern') },
+            ]
+          },
+          {
+            id: 'p2-11',
+            text: 'Dynamic prompt construction from templates',
+            resources: [
+              { type: 'yt', label: 'Dynamic Prompt Templates', url: yt('dynamic prompt templates LLM application') },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'doc', label: 'Anthropic Prompt Engineering Guide (Official) — Start here', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview' },
+      { type: 'doc', label: 'OpenAI Prompt Engineering Guide', url: 'https://platform.openai.com/docs/guides/prompt-engineering' },
+      { type: 'course', label: 'DeepLearning.AI: ChatGPT Prompt Engineering', url: yt('deeplearning.ai prompt engineering for developers') },
+      { type: 'doc', label: 'Prompt Engineering Guide (community)', url: 'https://www.promptingguide.ai/' },
+    ],
+    project: 'Build a structured data extractor — input: messy text, output: clean JSON (e.g., parse job listings into structured data)'
+  },
+  {
+    id: 'phase-3',
+    number: 3,
+    title: 'AI-Powered Applications',
+    duration: '3-4 weeks',
+    color: '#6366f1',
+    description: 'Your core bread and butter as an AI Engineer',
+    sections: [
+      {
+        title: 'API Integration',
+        topics: [
+          {
+            id: 'p3-1',
+            text: '<strong>Streaming responses</strong> to the frontend (SSE, WebSockets)',
+            resources: [
+              { type: 'yt', label: 'Stream LLM Responses in React', url: yt('stream LLM API response React Node.js tutorial') },
+              { type: 'doc', label: 'Anthropic: Streaming Messages', url: 'https://docs.anthropic.com/en/api/messages-streaming' },
+            ]
+          },
+          {
+            id: 'p3-2',
+            text: 'Error handling, retries, and rate limiting',
+            resources: [
+              { type: 'doc', label: 'Anthropic: Error Handling', url: 'https://docs.anthropic.com/en/api/errors' },
+              { type: 'yt', label: 'API Rate Limiting Best Practices', url: yt('API rate limiting retry strategy Node.js') },
+            ]
+          },
+          {
+            id: 'p3-3',
+            text: '<strong>Prompt caching</strong> for cost optimization',
+            resources: [
+              { type: 'doc', label: 'Anthropic: Prompt Caching', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching' },
+              { type: 'yt', label: 'Prompt Caching Explained', url: yt('anthropic prompt caching tutorial save costs') },
+            ]
+          },
+          {
+            id: 'p3-4',
+            text: 'Managing conversation history and context windows',
+            resources: [
+              { type: 'yt', label: 'Context Window Management', url: yt('LLM context window management conversation history') },
+              { type: 'doc', label: 'Anthropic: Conversation Guide', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/keep-context' },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'AI UIs in React',
+        topics: [
+          {
+            id: 'p3-5',
+            text: '<strong>Chat interfaces</strong> with streaming text rendering',
+            resources: [
+              { type: 'yt', label: 'Build ChatGPT Clone in React', url: yt('build ChatGPT clone React streaming tutorial 2025') },
+              { type: 'doc', label: 'Vercel AI SDK: useChat', url: 'https://sdk.vercel.ai/docs/ai-sdk-ui/chatbot' },
+            ]
+          },
+          {
+            id: 'p3-6',
+            text: 'Loading states and token-by-token display',
+            resources: [
+              { type: 'yt', label: 'Token Streaming UI in React', url: yt('react token streaming typewriter effect LLM') },
+            ]
+          },
+          {
+            id: 'p3-7',
+            text: 'Markdown and code rendering in AI responses',
+            resources: [
+              { type: 'yt', label: 'Render Markdown in React', url: yt('react-markdown syntax highlighting code blocks tutorial') },
+              { type: 'github', label: 'react-markdown', url: 'https://github.com/remarkjs/react-markdown' },
+            ]
+          },
+          {
+            id: 'p3-8',
+            text: 'Conversation management — history, branching, forking',
+            resources: [
+              { type: 'yt', label: 'Chat App Architecture', url: yt('AI chat application architecture conversation management React') },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Backend Architecture (Node.js)',
+        topics: [
+          {
+            id: 'p3-9',
+            text: 'API route design for AI features',
+            resources: [
+              { type: 'yt', label: 'Node.js AI API Design', url: yt('Node.js API design AI features express routes') },
+            ]
+          },
+          {
+            id: 'p3-10',
+            text: 'Session and conversation state management',
+            resources: [
+              { type: 'yt', label: 'Chat State Management', url: yt('conversation state management Node.js AI chatbot') },
+            ]
+          },
+          {
+            id: 'p3-11',
+            text: 'Cost tracking and usage monitoring',
+            resources: [
+              { type: 'yt', label: 'Track LLM API Costs', url: yt('track LLM API costs tokens usage monitoring') },
+            ]
+          },
+          {
+            id: 'p3-12',
+            text: 'Caching strategies for repeated queries',
+            resources: [
+              { type: 'yt', label: 'LLM Response Caching', url: yt('LLM response caching strategy Redis Node.js') },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'doc', label: 'Vercel AI SDK Docs — Best TypeScript AI framework', url: 'https://sdk.vercel.ai/docs/introduction' },
+      { type: 'doc', label: 'Anthropic TypeScript SDK', url: 'https://github.com/anthropics/anthropic-sdk-typescript' },
+      { type: 'doc', label: 'OpenAI Node.js SDK', url: 'https://github.com/openai/openai-node' },
+      { type: 'course', label: 'Build Full-Stack AI App (YouTube)', url: yt('build full stack AI chat app React Node.js 2025 tutorial') },
+    ],
+    project: 'Full-stack AI chat application with React frontend + Node.js backend, supporting streaming, conversation history, and multiple models'
+  },
+  {
+    id: 'phase-4',
+    number: 4,
+    title: 'RAG (Retrieval-Augmented Generation)',
+    duration: '3-4 weeks',
+    color: '#34d399',
+    description: 'The most in-demand AI Engineer skill right now',
+    sections: [
+      {
+        title: 'Embeddings',
+        topics: [
+          {
+            id: 'p4-1',
+            text: 'What <strong>embeddings</strong> are and how they represent meaning',
+            resources: [
+              { type: 'yt', label: 'Embeddings Explained Visually', url: yt('word embeddings explained visually beginner') },
+              { type: 'yt', label: 'Fireship: Vector Embeddings', url: yt('fireship vector embeddings explained') },
+            ]
+          },
+          {
+            id: 'p4-2',
+            text: 'Embedding models — OpenAI, Cohere, open-source alternatives',
+            resources: [
+              { type: 'doc', label: 'OpenAI: Embeddings Guide', url: 'https://platform.openai.com/docs/guides/embeddings' },
+              { type: 'yt', label: 'Comparing Embedding Models', url: yt('best embedding models comparison openai cohere 2025') },
+            ]
+          },
+          {
+            id: 'p4-3',
+            text: '<strong>Cosine similarity</strong> and vector search fundamentals',
+            resources: [
+              { type: 'yt', label: 'Vector Search Explained', url: yt('vector search cosine similarity explained for developers') },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Vector Databases',
+        topics: [
+          {
+            id: 'p4-4',
+            text: '<strong>Pinecone</strong> — managed vector DB',
+            resources: [
+              { type: 'doc', label: 'Pinecone Docs', url: 'https://docs.pinecone.io/' },
+              { type: 'yt', label: 'Pinecone Getting Started', url: yt('pinecone vector database getting started tutorial') },
+              { type: 'channel', label: 'James Briggs (Pinecone)', url: 'https://www.youtube.com/@jamesbriggs' },
+            ]
+          },
+          {
+            id: 'p4-5',
+            text: '<strong>pgvector</strong> — Postgres extension (great if you know SQL)',
+            resources: [
+              { type: 'github', label: 'pgvector', url: 'https://github.com/pgvector/pgvector' },
+              { type: 'yt', label: 'pgvector Tutorial', url: yt('pgvector postgres vector search tutorial') },
+            ]
+          },
+          {
+            id: 'p4-6',
+            text: 'Weaviate, Chroma — alternatives to evaluate',
+            resources: [
+              { type: 'doc', label: 'Chroma Docs', url: 'https://docs.trychroma.com/' },
+              { type: 'yt', label: 'Vector DB Comparison', url: yt('vector database comparison pinecone chroma weaviate pgvector') },
+            ]
+          },
+          {
+            id: 'p4-7',
+            text: 'Indexing, querying, and metadata filtering',
+            resources: [
+              { type: 'yt', label: 'Vector DB Indexing Deep Dive', url: yt('vector database indexing HNSW explained') },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Document Processing',
+        topics: [
+          {
+            id: 'p4-8',
+            text: '<strong>Chunking strategies</strong> — fixed-size, semantic, recursive',
+            resources: [
+              { type: 'yt', label: 'Chunking Strategies for RAG', url: yt('RAG chunking strategies comparison semantic recursive') },
+              { type: 'yt', label: 'Greg Kamradt: Text Splitting', url: yt('greg kamradt text splitting chunking') },
+            ]
+          },
+          {
+            id: 'p4-9',
+            text: 'Handling PDFs, HTML, markdown, code files',
+            resources: [
+              { type: 'yt', label: 'Parse Documents for RAG', url: yt('parse PDF HTML documents for RAG pipeline') },
+            ]
+          },
+          {
+            id: 'p4-10',
+            text: 'Metadata extraction and enrichment',
+            resources: [
+              { type: 'yt', label: 'RAG Metadata Strategies', url: yt('RAG metadata extraction enrichment improve retrieval') },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'RAG Pipeline Design',
+        topics: [
+          {
+            id: 'p4-11',
+            text: 'Naive RAG vs <strong>advanced RAG</strong> architectures',
+            resources: [
+              { type: 'yt', label: 'Advanced RAG Techniques', url: yt('advanced RAG techniques beyond naive RAG 2025') },
+              { type: 'yt', label: 'RAG From Scratch (LangChain)', url: yt('RAG from scratch langchain tutorial') },
+            ]
+          },
+          {
+            id: 'p4-12',
+            text: '<strong>Hybrid search</strong> — combining vector + keyword search',
+            resources: [
+              { type: 'yt', label: 'Hybrid Search Explained', url: yt('hybrid search vector keyword BM25 RAG') },
+            ]
+          },
+          {
+            id: 'p4-13',
+            text: 'Re-ranking retrieved results for relevance',
+            resources: [
+              { type: 'yt', label: 'RAG Re-Ranking', url: yt('RAG reranking cohere rerank improve retrieval') },
+            ]
+          },
+          {
+            id: 'p4-14',
+            text: 'Context window stuffing strategies',
+            resources: [
+              { type: 'yt', label: 'RAG Context Optimization', url: yt('RAG context window optimization strategies') },
+            ]
+          },
+          {
+            id: 'p4-15',
+            text: '<strong>Evaluation</strong> — measuring RAG quality (relevance, faithfulness, completeness)',
+            resources: [
+              { type: 'yt', label: 'RAG Evaluation Metrics', url: yt('RAG evaluation metrics RAGAS faithfulness relevance') },
+              { type: 'github', label: 'RAGAS Framework', url: 'https://github.com/explodinggradients/ragas' },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'channel', label: 'James Briggs — Best RAG & Pinecone tutorials', url: 'https://www.youtube.com/@jamesbriggs' },
+      { type: 'doc', label: 'Pinecone Learning Center', url: 'https://www.pinecone.io/learn/' },
+      { type: 'course', label: 'freeCodeCamp: RAG Tutorial', url: yt('freeCodeCamp RAG retrieval augmented generation tutorial') },
+      { type: 'course', label: 'Build RAG App from Scratch', url: yt('build RAG application from scratch Node.js Python 2025') },
+    ],
+    project: '"Chat with your docs" app — upload documents, ask questions, get cited answers with source references'
+  },
+  {
+    id: 'phase-5',
+    number: 5,
+    title: 'Tool Use & Function Calling',
+    duration: '2-3 weeks',
+    color: '#f97316',
+    description: 'Making LLMs take actions in the real world',
+    sections: [
+      {
+        title: 'Function Calling',
+        topics: [
+          {
+            id: 'p5-1',
+            text: '<strong>OpenAI function calling</strong> and Anthropic tool use APIs',
+            resources: [
+              { type: 'doc', label: 'Anthropic: Tool Use Guide', url: 'https://docs.anthropic.com/en/docs/build-with-claude/tool-use/overview' },
+              { type: 'doc', label: 'OpenAI: Function Calling', url: 'https://platform.openai.com/docs/guides/function-calling' },
+              { type: 'yt', label: 'Function Calling Tutorial', url: yt('openai function calling tutorial javascript 2025') },
+            ]
+          },
+          {
+            id: 'p5-2',
+            text: 'Schema design for tools using <strong>JSON Schema</strong>',
+            resources: [
+              { type: 'doc', label: 'JSON Schema Reference', url: 'https://json-schema.org/learn/getting-started-step-by-step' },
+              { type: 'yt', label: 'JSON Schema for AI Tools', url: yt('JSON Schema LLM function calling tool design') },
+            ]
+          },
+          {
+            id: 'p5-3',
+            text: 'Handling tool results and multi-turn tool loops',
+            resources: [
+              { type: 'yt', label: 'Multi-Turn Tool Use', url: yt('LLM multi turn tool use loop implementation') },
+              { type: 'doc', label: 'Anthropic: Tool Use Examples', url: 'https://docs.anthropic.com/en/docs/build-with-claude/tool-use/overview' },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Common Tool Patterns',
+        topics: [
+          {
+            id: 'p5-4',
+            text: 'Database queries via natural language',
+            resources: [
+              { type: 'yt', label: 'Natural Language to SQL', url: yt('natural language to SQL LLM text-to-sql tutorial') },
+            ]
+          },
+          {
+            id: 'p5-5',
+            text: 'API calls on behalf of the user',
+            resources: [
+              { type: 'yt', label: 'LLM API Integration Patterns', url: yt('LLM call external APIs tool use pattern') },
+            ]
+          },
+          {
+            id: 'p5-6',
+            text: 'Code execution sandboxes',
+            resources: [
+              { type: 'yt', label: 'Code Interpreter Pattern', url: yt('build code interpreter sandbox LLM') },
+              { type: 'github', label: 'E2B Sandbox', url: 'https://github.com/e2b-dev/e2b' },
+            ]
+          },
+          {
+            id: 'p5-7',
+            text: 'File system operations',
+            resources: [
+              { type: 'yt', label: 'AI File Operations', url: yt('AI agent file system operations tool use') },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Safety & Permissions',
+        topics: [
+          {
+            id: 'p5-8',
+            text: 'Input validation before tool execution',
+            resources: [
+              { type: 'yt', label: 'AI Tool Safety', url: yt('AI tool use safety input validation best practices') },
+            ]
+          },
+          {
+            id: 'p5-9',
+            text: 'Permission scoping and least privilege',
+            resources: [
+              { type: 'doc', label: 'OWASP LLM Security', url: 'https://owasp.org/www-project-top-10-for-large-language-model-applications/' },
+            ]
+          },
+          {
+            id: 'p5-10',
+            text: '<strong>Human-in-the-loop</strong> confirmation for dangerous actions',
+            resources: [
+              { type: 'yt', label: 'Human-in-the-Loop AI', url: yt('human in the loop AI agent confirmation pattern') },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'doc', label: 'Anthropic Tool Use Docs — Best starting point', url: 'https://docs.anthropic.com/en/docs/build-with-claude/tool-use/overview' },
+      { type: 'course', label: 'Build AI with Function Calling', url: yt('build AI assistant function calling tool use complete tutorial') },
+      { type: 'channel', label: 'Dave Ebbelaar — AI agent tutorials', url: yt('dave ebbelaar AI agent tutorial') },
+    ],
+    project: 'AI assistant that can query a database, call external APIs, and perform calculations via tool use'
+  },
+  {
+    id: 'phase-6',
+    number: 6,
+    title: 'AI Agents',
+    duration: '3-4 weeks',
+    color: '#f43f5e',
+    description: 'The frontier — autonomous systems that plan and execute',
+    sections: [
+      {
+        title: 'Agent Fundamentals',
+        topics: [
+          {
+            id: 'p6-1',
+            text: '<strong>ReAct pattern</strong> — Reason + Act loop',
+            resources: [
+              { type: 'yt', label: 'ReAct Pattern Explained', url: yt('ReAct agent pattern explained reason act LLM') },
+              { type: 'yt', label: 'Build ReAct Agent from Scratch', url: yt('build ReAct agent from scratch python javascript') },
+            ]
+          },
+          {
+            id: 'p6-2',
+            text: 'Planning and task decomposition',
+            resources: [
+              { type: 'yt', label: 'AI Agent Planning', url: yt('AI agent planning task decomposition techniques') },
+            ]
+          },
+          {
+            id: 'p6-3',
+            text: 'Memory — short-term context vs long-term storage',
+            resources: [
+              { type: 'yt', label: 'AI Agent Memory Systems', url: yt('AI agent memory systems short term long term') },
+            ]
+          },
+          {
+            id: 'p6-4',
+            text: 'When to use agents vs simple prompt chains',
+            resources: [
+              { type: 'yt', label: 'Agents vs Chains', url: yt('when to use AI agents vs prompt chains decision guide') },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Agent Frameworks',
+        topics: [
+          {
+            id: 'p6-5',
+            text: 'Building agents <strong>from scratch</strong> first (recommended)',
+            resources: [
+              { type: 'yt', label: 'Build AI Agent from Scratch', url: yt('build AI agent from scratch no framework tutorial 2025') },
+              { type: 'channel', label: 'AI Jason', url: yt('AI jason build agent from scratch') },
+            ]
+          },
+          {
+            id: 'p6-6',
+            text: '<strong>Vercel AI SDK</strong> — TypeScript-native (your sweet spot)',
+            resources: [
+              { type: 'doc', label: 'Vercel AI SDK: Agents', url: 'https://sdk.vercel.ai/docs/ai-sdk-core/agents' },
+              { type: 'yt', label: 'Vercel AI SDK Tutorial', url: yt('vercel AI SDK agent tutorial typescript') },
+            ]
+          },
+          {
+            id: 'p6-7',
+            text: '<strong>Anthropic Agent SDK</strong>',
+            resources: [
+              { type: 'doc', label: 'Anthropic Agent Docs', url: 'https://docs.anthropic.com/en/docs/agents' },
+              { type: 'yt', label: 'Anthropic Agent SDK Tutorial', url: yt('anthropic claude agent SDK tutorial') },
+            ]
+          },
+          {
+            id: 'p6-8',
+            text: 'LangChain / LangGraph (Python ecosystem)',
+            resources: [
+              { type: 'doc', label: 'LangGraph Docs', url: 'https://langchain-ai.github.io/langgraph/' },
+              { type: 'yt', label: 'LangGraph Agent Tutorial', url: yt('langgraph agent tutorial from scratch') },
+              { type: 'doc', label: 'LangChain JS Docs', url: 'https://js.langchain.com/docs/introduction/' },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Multi-Agent & MCP',
+        topics: [
+          {
+            id: 'p6-9',
+            text: 'Multi-agent orchestration patterns',
+            resources: [
+              { type: 'yt', label: 'Multi-Agent Systems', url: yt('multi agent AI system orchestration patterns tutorial') },
+            ]
+          },
+          {
+            id: 'p6-10',
+            text: 'Supervisor / worker architectures',
+            resources: [
+              { type: 'yt', label: 'Agent Supervisor Pattern', url: yt('AI agent supervisor worker architecture pattern') },
+            ]
+          },
+          {
+            id: 'p6-11',
+            text: '<strong>MCP (Model Context Protocol)</strong> — what it is and why it matters',
+            resources: [
+              { type: 'doc', label: 'MCP Official Docs', url: 'https://modelcontextprotocol.io/' },
+              { type: 'yt', label: 'MCP Explained', url: yt('model context protocol MCP explained anthropic') },
+              { type: 'github', label: 'MCP Specification', url: 'https://github.com/modelcontextprotocol/specification' },
+            ]
+          },
+          {
+            id: 'p6-12',
+            text: 'Building MCP servers in Node.js',
+            resources: [
+              { type: 'doc', label: 'MCP: Build a Server', url: 'https://modelcontextprotocol.io/quickstart/server' },
+              { type: 'yt', label: 'Build MCP Server Tutorial', url: yt('build MCP server node.js typescript tutorial') },
+              { type: 'github', label: 'MCP TypeScript SDK', url: 'https://github.com/modelcontextprotocol/typescript-sdk' },
+            ]
+          },
+          {
+            id: 'p6-13',
+            text: 'Connecting agents to MCP tools',
+            resources: [
+              { type: 'yt', label: 'MCP + AI Agents', url: yt('connect AI agent MCP tools tutorial') },
+              { type: 'doc', label: 'MCP: Concepts', url: 'https://modelcontextprotocol.io/docs/concepts/architecture' },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'doc', label: 'Anthropic: Building Effective Agents (Blog)', url: 'https://www.anthropic.com/engineering/building-effective-agents' },
+      { type: 'doc', label: 'MCP Official Site', url: 'https://modelcontextprotocol.io/' },
+      { type: 'channel', label: 'AI Jason — Agent building tutorials', url: yt('AI Jason channel agent') },
+      { type: 'course', label: 'DeepLearning.AI: AI Agents', url: yt('deeplearning.ai AI agents course') },
+    ],
+    project: 'Build a coding assistant agent that can read files, search code, run tests, and propose fixes'
+  },
+  {
+    id: 'phase-7',
+    number: 7,
+    title: 'Production & Operations',
+    duration: '2-3 weeks',
+    color: '#eab308',
+    description: 'Shipping AI features that work reliably at scale',
+    sections: [
+      {
+        title: 'Evaluation & Testing',
+        topics: [
+          {
+            id: 'p7-1',
+            text: 'Building <strong>eval suites</strong> for LLM outputs',
+            resources: [
+              { type: 'yt', label: 'LLM Evaluation Guide', url: yt('LLM evaluation testing suite build tutorial') },
+              { type: 'doc', label: 'Anthropic: Eval Guide', url: 'https://docs.anthropic.com/en/docs/build-with-claude/develop-tests' },
+            ]
+          },
+          {
+            id: 'p7-2',
+            text: 'Automated regression testing for prompts',
+            resources: [
+              { type: 'yt', label: 'Prompt Regression Testing', url: yt('prompt regression testing automated LLM CI CD') },
+              { type: 'github', label: 'promptfoo', url: 'https://github.com/promptfoo/promptfoo' },
+            ]
+          },
+          {
+            id: 'p7-3',
+            text: 'A/B testing AI features',
+            resources: [
+              { type: 'yt', label: 'A/B Test AI Features', url: yt('A/B testing AI features LLM production') },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Observability',
+        topics: [
+          {
+            id: 'p7-4',
+            text: 'Logging prompts, responses, latency, and costs',
+            resources: [
+              { type: 'yt', label: 'LLM Observability', url: yt('LLM observability logging monitoring production') },
+            ]
+          },
+          {
+            id: 'p7-5',
+            text: 'Tools — <strong>LangSmith, Helicone, Braintrust</strong>, custom dashboards',
+            resources: [
+              { type: 'doc', label: 'LangSmith Docs', url: 'https://docs.smith.langchain.com/' },
+              { type: 'doc', label: 'Helicone', url: 'https://www.helicone.ai/' },
+              { type: 'yt', label: 'LangSmith Tutorial', url: yt('langsmith tutorial LLM monitoring tracing') },
+              { type: 'doc', label: 'Braintrust', url: 'https://www.braintrust.dev/' },
+            ]
+          },
+          {
+            id: 'p7-6',
+            text: 'Debugging failed or bad responses',
+            resources: [
+              { type: 'yt', label: 'Debug LLM Responses', url: yt('debug LLM bad responses troubleshooting production') },
+            ]
+          },
+        ]
+      },
+      {
+        title: 'Cost & Reliability',
+        topics: [
+          {
+            id: 'p7-7',
+            text: '<strong>Model selection per task</strong> — expensive vs cheap models',
+            resources: [
+              { type: 'yt', label: 'LLM Cost Optimization', url: yt('LLM cost optimization model selection per task routing') },
+            ]
+          },
+          {
+            id: 'p7-8',
+            text: 'Caching — prompt caching, response caching',
+            resources: [
+              { type: 'doc', label: 'Anthropic: Prompt Caching', url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching' },
+              { type: 'yt', label: 'LLM Caching Strategies', url: yt('LLM caching strategies semantic cache response cache') },
+            ]
+          },
+          {
+            id: 'p7-9',
+            text: 'Batch processing where latency allows',
+            resources: [
+              { type: 'doc', label: 'Anthropic: Message Batches', url: 'https://docs.anthropic.com/en/docs/build-with-claude/message-batches' },
+            ]
+          },
+          {
+            id: 'p7-10',
+            text: '<strong>Fallback chains</strong> — if model A fails, try model B',
+            resources: [
+              { type: 'yt', label: 'LLM Fallback & Routing', url: yt('LLM fallback chain model routing reliability pattern') },
+            ]
+          },
+          {
+            id: 'p7-11',
+            text: 'Graceful degradation and rate limiting',
+            resources: [
+              { type: 'yt', label: 'Production AI Reliability', url: yt('AI production reliability graceful degradation patterns') },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'github', label: 'promptfoo — Open-source LLM testing', url: 'https://github.com/promptfoo/promptfoo' },
+      { type: 'doc', label: 'Helicone — LLM observability platform', url: 'https://www.helicone.ai/' },
+      { type: 'course', label: 'LLM in Production (YouTube)', url: yt('LLM production deployment best practices 2025') },
+    ],
+    project: 'Add observability, eval, and cost tracking to one of your earlier projects — make it production-ready'
+  },
+  {
+    id: 'phase-8',
+    number: 8,
+    title: 'Specialization',
+    duration: 'Ongoing',
+    color: '#ec4899',
+    description: 'Pick 1-2 areas to go deep based on interest and job market',
+    sections: [
+      {
+        title: 'Choose Your Path',
+        topics: [
+          {
+            id: 'p8-1',
+            text: '<strong>Multimodal AI</strong> — vision, audio, video inputs and outputs',
+            resources: [
+              { type: 'yt', label: 'Multimodal AI Tutorial', url: yt('multimodal AI vision audio LLM tutorial 2025') },
+              { type: 'doc', label: 'Anthropic: Vision', url: 'https://docs.anthropic.com/en/docs/build-with-claude/vision' },
+            ]
+          },
+          {
+            id: 'p8-2',
+            text: '<strong>Fine-tuning</strong> — customizing models on domain-specific data',
+            resources: [
+              { type: 'yt', label: 'Fine-Tuning LLMs Guide', url: yt('fine tuning LLM tutorial beginner guide 2025') },
+              { type: 'doc', label: 'OpenAI: Fine-Tuning', url: 'https://platform.openai.com/docs/guides/fine-tuning' },
+            ]
+          },
+          {
+            id: 'p8-3',
+            text: '<strong>Voice AI</strong> — real-time voice assistants (WebRTC + speech models)',
+            resources: [
+              { type: 'yt', label: 'Build Voice AI Assistant', url: yt('build real-time voice AI assistant WebRTC 2025') },
+              { type: 'doc', label: 'OpenAI: Realtime API', url: 'https://platform.openai.com/docs/guides/realtime' },
+            ]
+          },
+          {
+            id: 'p8-4',
+            text: '<strong>AI UX Patterns</strong> — pioneering new interaction paradigms beyond chat',
+            resources: [
+              { type: 'yt', label: 'AI UX Design Patterns', url: yt('AI UX design patterns beyond chatbot interface 2025') },
+              { type: 'doc', label: 'Vercel AI SDK: Generative UI', url: 'https://sdk.vercel.ai/docs/ai-sdk-rsc/generative-ui' },
+            ]
+          },
+          {
+            id: 'p8-5',
+            text: '<strong>Domain-specific AI</strong> — legal, medical, finance, education, dev tools',
+            resources: [
+              { type: 'yt', label: 'Domain-Specific AI Apps', url: yt('build domain specific AI application vertical SaaS') },
+            ]
+          },
+          {
+            id: 'p8-6',
+            text: '<strong>Open-source models</strong> — running local models, Ollama, quantization',
+            resources: [
+              { type: 'yt', label: 'Ollama Tutorial', url: yt('ollama run local LLM tutorial getting started') },
+              { type: 'doc', label: 'Ollama', url: 'https://ollama.com/' },
+              { type: 'channel', label: 'Matt Williams — Ollama tutorials', url: yt('matt williams ollama tutorial') },
+            ]
+          },
+        ]
+      }
+    ],
+    phaseResources: [
+      { type: 'doc', label: 'Simon Willison\'s Blog — Best independent AI engineering writing', url: 'https://simonwillison.net/' },
+      { type: 'doc', label: 'Latent Space Podcast — AI engineering community', url: 'https://www.latent.space/podcast' },
+      { type: 'doc', label: 'Hugging Face — Models, datasets, community', url: 'https://huggingface.co/' },
+      { type: 'channel', label: 'Yannic Kilcher — Research paper reviews', url: 'https://www.youtube.com/@YannicKilcher' },
+    ],
+    project: 'Build a deep, portfolio-worthy project in your chosen specialization'
+  }
+];
+
+// SVG icons
+const ICONS = {
+  yt: '<svg class="r-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2c-.3-1-1-1.8-2-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.5.6c-1 .3-1.7 1.1-2 2.1C0 8.1 0 12 0 12s0 3.9.5 5.8c.3 1 1 1.8 2 2.1 1.9.6 9.5.6 9.5.6s7.6 0 9.5-.6c1-.3 1.7-1.1 2-2.1.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>',
+  doc: '<svg class="r-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  channel: '<svg class="r-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  github: '<svg class="r-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>',
+  course: '<svg class="r-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+};
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : { checked: {}, comments: {} };
+  } catch { return { checked: {}, comments: {} }; }
+}
+
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+function getAllTopicIds() {
+  const ids = [];
+  DATA.forEach(p => p.sections.forEach(s => s.topics.forEach(t => ids.push(t.id))));
+  return ids;
+}
+
+function updateProgress() {
+  const allIds = getAllTopicIds();
+  const total = allIds.length;
+  const done = allIds.filter(id => state.checked[id]).length;
+  const commentCount = Object.values(state.comments).filter(c => c && c.trim()).length;
+
+  document.getElementById('overall-pct').textContent = total ? Math.round((done / total) * 100) + '%' : '0%';
+  document.getElementById('overall-bar').style.width = total ? ((done / total) * 100) + '%' : '0%';
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-comments').textContent = commentCount;
+
+  DATA.forEach(phase => {
+    const phaseIds = [];
+    phase.sections.forEach(s => s.topics.forEach(t => phaseIds.push(t.id)));
+    const phaseDone = phaseIds.filter(id => state.checked[id]).length;
+    const pct = phaseIds.length ? Math.round((phaseDone / phaseIds.length) * 100) : 0;
+    const miniText = document.querySelector(`#${phase.id} .mini-text`);
+    const miniFill = document.querySelector(`#${phase.id} .mini-fill`);
+    if (miniText) miniText.textContent = pct + '%';
+    if (miniFill) miniFill.style.width = pct + '%';
+  });
+}
+
+function toggleCheck(topicId) {
+  state.checked[topicId] = !state.checked[topicId];
+  saveState();
+  const el = document.querySelector(`[data-topic-id="${topicId}"]`);
+  if (el) {
+    el.classList.toggle('completed', !!state.checked[topicId]);
+    el.querySelector('.topic-checkbox').checked = !!state.checked[topicId];
+  }
+  updateProgress();
+}
+
+function toggleComment(topicId) {
+  const el = document.querySelector(`[data-comment-id="${topicId}"]`);
+  if (el) {
+    el.classList.toggle('visible');
+    if (el.classList.contains('visible')) el.querySelector('textarea').focus();
+  }
+}
+
+function saveComment(topicId, value) {
+  state.comments[topicId] = value;
+  saveState();
+  const btn = document.querySelector(`[data-topic-id="${topicId}"] .btn-comment`);
+  if (btn) btn.classList.toggle('has-comment', !!value.trim());
+  updateProgress();
+}
+
+function renderResources(resources) {
+  if (!resources || !resources.length) return '';
+  let html = '<div class="topic-resources">';
+  resources.forEach(r => {
+    const icon = ICONS[r.type] || ICONS.doc;
+    html += `<a href="${r.url}" target="_blank" rel="noopener" class="resource-link ${r.type}">${icon} ${r.label}</a>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderPhaseResources(resources) {
+  if (!resources || !resources.length) return '';
+  let html = '<div class="phase-resources-box"><div class="pr-label">Recommended Channels & Resources</div><div class="pr-list">';
+  resources.forEach(r => {
+    const badgeType = r.type;
+    const badgeLabel = { yt: 'YT', doc: 'Docs', channel: 'Channel', github: 'GitHub', course: 'Course' }[badgeType] || 'Link';
+    html += `<div class="pr-item"><span class="pr-badge ${badgeType}">${badgeLabel}</span><a href="${r.url}" target="_blank" rel="noopener">${r.label}</a></div>`;
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function render() {
+  const container = document.getElementById('phases-container');
+  let html = '';
+
+  DATA.forEach(phase => {
+    const phaseIds = [];
+    phase.sections.forEach(s => s.topics.forEach(t => phaseIds.push(t.id)));
+
+    html += `<div class="phase" id="${phase.id}">`;
+    html += `<div class="phase-header" onclick="togglePhase('${phase.id}')">`;
+    html += `<div class="phase-number" style="background: ${phase.color}">${phase.number}</div>`;
+    html += `<div class="phase-info"><div class="phase-title">${phase.title}</div>`;
+    html += `<div class="phase-meta">${phase.duration} &middot; ${phaseIds.length} topics</div></div>`;
+    html += `<div class="phase-progress-mini"><div class="mini-bar"><div class="mini-fill" style="background: ${phase.color}"></div></div>`;
+    html += `<span class="mini-text">0%</span></div>`;
+    html += `<svg class="phase-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    html += `</div>`;
+
+    html += `<div class="phase-body">`;
+    html += `<div class="phase-description">${phase.description}</div>`;
+
+    phase.sections.forEach(section => {
+      html += `<div class="section-title">${section.title}</div>`;
+      section.topics.forEach(topic => {
+        const isChecked = !!state.checked[topic.id];
+        const comment = state.comments[topic.id] || '';
+        const hasComment = !!comment.trim();
+
+        html += `<div class="topic ${isChecked ? 'completed' : ''}" data-topic-id="${topic.id}">`;
+        html += `<input type="checkbox" class="topic-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${topic.id}')">`;
+        html += `<div class="topic-content">`;
+        html += `<div class="topic-text">${topic.text}</div>`;
+        html += renderResources(topic.resources);
+        html += `<div class="topic-comment ${hasComment ? 'visible' : ''}" data-comment-id="${topic.id}">`;
+        html += `<textarea placeholder="Add your notes, resources, or thoughts..." oninput="saveComment('${topic.id}', this.value)">${comment}</textarea>`;
+        html += `<div class="comment-hint">Auto-saved to browser storage</div></div></div>`;
+        html += `<div class="topic-actions">`;
+        html += `<button class="btn-comment ${hasComment ? 'has-comment' : ''}" onclick="toggleComment('${topic.id}')" title="Add note">`;
+        html += `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+        html += `Note</button></div></div>`;
+      });
+    });
+
+    if (phase.phaseResources) html += renderPhaseResources(phase.phaseResources);
+
+    if (phase.project) {
+      html += `<div class="project-card"><div class="project-icon">&#x1F6E0;&#xFE0F;</div>`;
+      html += `<div><div class="project-label">Phase Project</div>`;
+      html += `<div class="project-text">${phase.project}</div></div></div>`;
+    }
+
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html;
+  updateProgress();
+}
+
+function togglePhase(phaseId) { document.getElementById(phaseId).classList.toggle('open'); }
+function showResetConfirm() { document.getElementById('confirm-overlay').classList.add('visible'); }
+function hideResetConfirm() { document.getElementById('confirm-overlay').classList.remove('visible'); }
+
+function resetAll() {
+  state = { checked: {}, comments: {} };
+  saveState();
+  render();
+  hideResetConfirm();
+}
+
+function exportProgress() {
+  const allIds = getAllTopicIds();
+  const total = allIds.length;
+  const done = allIds.filter(id => state.checked[id]).length;
+  let text = `AI Engineer Roadmap — Progress Export\nDate: ${new Date().toLocaleDateString()}\nOverall: ${done}/${total} (${Math.round((done/total)*100)}%)\n\n`;
+
+  DATA.forEach(phase => {
+    text += `=== Phase ${phase.number}: ${phase.title} ===\n`;
+    phase.sections.forEach(section => {
+      text += `\n  ${section.title}\n`;
+      section.topics.forEach(topic => {
+        const check = state.checked[topic.id] ? '[x]' : '[ ]';
+        const plain = topic.text.replace(/<[^>]+>/g, '');
+        text += `  ${check} ${plain}\n`;
+        if (topic.resources) {
+          topic.resources.forEach(r => { text += `      -> ${r.label}: ${r.url}\n`; });
+        }
+        const comment = state.comments[topic.id];
+        if (comment && comment.trim()) text += `      Note: ${comment.trim()}\n`;
+      });
+    });
+    text += '\n';
+  });
+
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ai-engineer-roadmap-progress.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+render();
+</script>
+</body>
+</html>
